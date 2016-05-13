@@ -1,0 +1,6 @@
+#Demo Project for Running Processing from Gradle and Eclipse
+
+See http://toastedbits.com/
+
+##Run Example
+./gradlew run

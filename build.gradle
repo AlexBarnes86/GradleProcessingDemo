@@ -1,0 +1,96 @@
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "application"
+
+mainClassName = "com.toastedbits.demos.gradle.processing.Main"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext.processingVersion = "3.1"
+
+//The first parts of the maven coordinates don't really matter so long as we are using a flatDir
+//So these version numbers could be anything really
+ext.gluegenVersion = "2.3.2"
+ext.joglVersion = "2.3.2"
+
+allprojects {
+	repositories {
+		mavenCentral()
+		
+//		Unfortunately both gluegen and jogl require the native JNI jars to
+//		be in the same directory as gluegen-rt and jogl-all respectively.
+//		
+//		By default Gradle keeps dependencies in independent folders based
+//		on maven coordinates. We can work around this issue by checking
+//		them into the repo and using flatDir. Not ideal, but it works.
+
+		flatDir { dirs "${rootDir}/lib" }
+	}
+}
+
+
+
+dependencies {
+	compile "org.processing:core:${processingVersion}"
+
+//We would normally do this:
+//	compile ":gluegen-rt:${gluegenVersion}"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-android-aarch64"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-android-armv6"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-linux-amd64"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-linux-armv6"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-linux-armv6hf"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-linux-i586"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-macosx-universal"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-solaris-amd64"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-solaris-i586"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-windows-amd64"
+//	runtime ":gluegen-rt:${gluegenVersion}:natives-windows-i586"
+//
+//	compile ":jogl-all:${joglVersion}"
+//	runtime ":jogl-all:${joglVersion}:natives-android-aarch64"
+//	runtime ":jogl-all:${joglVersion}:natives-android-armv6"
+//	runtime ":jogl-all:${joglVersion}:natives-linux-amd64"
+//	runtime ":jogl-all:${joglVersion}:natives-linux-armv6"
+//	runtime ":jogl-all:${joglVersion}:natives-linux-armv6hf"
+//	runtime ":jogl-all:${joglVersion}:natives-linux-i586"
+//	runtime ":jogl-all:${joglVersion}:natives-macosx-universal"
+//	runtime ":jogl-all:${joglVersion}:natives-solaris-amd64"
+//	runtime ":jogl-all:${joglVersion}:natives-solaris-i586"
+//	runtime ":jogl-all:${joglVersion}:natives-windows-amd64"
+//	runtime ":jogl-all:${joglVersion}:natives-windows-i586"
+
+//But since we are reading from the flatDir do this instead
+//Note you can comment out any system you are not currently distributing to 
+//if you don't wish to have it pollute your classpath anymore than necessary
+	compile ":gluegen-rt"
+	runtime ":gluegen-rt:natives-android-aarch64"
+	runtime ":gluegen-rt:natives-android-armv6"
+	runtime ":gluegen-rt:natives-linux-amd64"
+	runtime ":gluegen-rt:natives-linux-armv6"
+	runtime ":gluegen-rt:natives-linux-armv6hf"
+	runtime ":gluegen-rt:natives-linux-i586"
+	runtime ":gluegen-rt:natives-macosx-universal"
+	runtime ":gluegen-rt:natives-solaris-amd64"
+	runtime ":gluegen-rt:natives-solaris-i586"
+	runtime ":gluegen-rt:natives-windows-amd64"
+	runtime ":gluegen-rt:natives-windows-i586"
+
+	compile ":jogl-all"
+	runtime ":jogl-all:natives-android-aarch64"
+	runtime ":jogl-all:natives-android-armv6"
+	runtime ":jogl-all:natives-linux-amd64"
+	runtime ":jogl-all:natives-linux-armv6"
+	runtime ":jogl-all:natives-linux-armv6hf"
+	runtime ":jogl-all:natives-linux-i586"
+	runtime ":jogl-all:natives-macosx-universal"
+	runtime ":jogl-all:natives-solaris-amd64"
+	runtime ":jogl-all:natives-solaris-i586"
+	runtime ":jogl-all:natives-windows-amd64"
+	runtime ":jogl-all:natives-windows-i586"
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = 2.13
+}
